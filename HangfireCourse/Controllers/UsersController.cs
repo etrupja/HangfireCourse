@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HangfireCourse.Data;
@@ -21,10 +24,21 @@ namespace HangfireCourse.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation("Index method!");
+            
+            var jobId = BackgroundJob.Enqueue(() => Information("BackgroundJob.Enqueue - executed!"));
             return View(await _context.Users.ToListAsync());
         }
-        
+
+
+        public async Task<IActionResult> Hello(string id)
+        {
+            var user = _context.Users.FirstOrDefault(n => n.Id == id);
+            if (user != null) BackgroundJob.Enqueue(() => HelloUser(user));
+
+            return RedirectToAction("Index");
+        }
+
+
         //GET Users/Info
         public async Task<IActionResult> Info()
         {
@@ -43,5 +57,8 @@ namespace HangfireCourse.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+        public void Information(string value) => _logger.LogInformation(value);
+        public void HelloUser(User user) => _logger.LogInformation($"Hello {user.Username} ({user.Email}) ");
     }
 }

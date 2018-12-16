@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire;
 using HangfireCourse.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +39,8 @@ namespace HangfireCourse
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            //Configure hangfire
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -61,6 +64,10 @@ namespace HangfireCourse
             
             //Configure a logging file
             loggerFactory.AddFile("Logs/hangfire-{Date}.txt");
+
+            //Hangfire server and dashboard configuration
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
 
             app.UseMvc(routes =>
             {

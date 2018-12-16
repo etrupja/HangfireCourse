@@ -13,17 +13,18 @@
                     <p class="lead text-muted mt-2">This is the list of all users waiting for the site to be online...</p>
                 </div>
             </div>
-            <a href="#" class="btn btn-primary navbar-btn ml-0 ml-lg-3">Update </a>
+            <a onclick="location.href = '@Url.Action("Hello", "Users" )'" class="btn btn-primary navbar-btn ml-0 ml-lg-3"> Update </a>
         </div>
+        <div>@TempData["Student"]</div>
         <div class="integrations mt-5">
             <div class="row">
                 @foreach (User user in Model)
                 {
                     <div class="col-lg-4">
                         <div class="box text-center">
-                            @*<div class="icon d-flex align-items-end"><img src="img/monitor.svg" alt="..." class="img-fluid"></div>*@
                             <h3 class="h4">@user.Username</h3>
                             <p class="text-small font-weight-light">@user.Email</p>
+                            <a onclick="location.href = '@Url.Action("Hello", "Users", new {@id = user.Id})'" class="btn btn-success navbar-btn ml-0 ml-lg-3"> Say Hello </a>
                         </div>
                     </div>
                 }
