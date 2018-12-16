@@ -38,6 +38,13 @@ namespace HangfireCourse.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> Remind(string id)
+        {
+            var user = _context.Users.FirstOrDefault(n => n.Id == id);
+            if (user != null) BackgroundJob.Schedule(() => RemindUser(user), TimeSpan.FromMinutes(10));
+
+            return RedirectToAction("Index");
+        }
 
         //GET Users/Info
         public async Task<IActionResult> Info()
@@ -60,5 +67,6 @@ namespace HangfireCourse.Controllers
 
         public void Information(string value) => _logger.LogInformation(value);
         public void HelloUser(User user) => _logger.LogInformation($"Hello {user.Username} ({user.Email}) ");
+        public void RemindUser(User user) => _logger.LogInformation($"Remind {user.Username} ({user.Email}) ");
     }
 }

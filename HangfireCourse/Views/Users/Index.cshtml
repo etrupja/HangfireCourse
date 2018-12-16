@@ -24,7 +24,10 @@
                         <div class="box text-center">
                             <h3 class="h4">@user.Username</h3>
                             <p class="text-small font-weight-light">@user.Email</p>
-                            <a onclick="location.href = '@Url.Action("Hello", "Users", new {@id = user.Id})'" class="btn btn-success navbar-btn ml-0 ml-lg-3"> Say Hello </a>
+                            <div>
+                                <a onclick="location.href = '@Url.Action("Hello", "Users", new {@id = user.Id})'" class="btn btn-success navbar-btn ml-0 ml-lg-3"> Say Hello </a>
+                                <a onclick="location.href = '@Url.Action("Remind", "Users", new {@id = user.Id})'" class="btn btn-primary navbar-btn ml-0 ml-lg-3"> Remind </a>
+                            </div>
                         </div>
                     </div>
                 }
